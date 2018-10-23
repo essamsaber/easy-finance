@@ -48,6 +48,7 @@
         {{--</section>--}}
 
         <!-- Main content -->
+            @include('layouts.partials.flash')
         @yield('content')
         <!-- /.content -->
     </div>
@@ -69,6 +70,8 @@
 <!-- AdminLTE App -->
 <script src="{{asset('js/app.min.js')}}"></script>
 <script src="{{asset('plugins/simplemde/simplemde.min.js')}}"></script>
+<script src="{{asset('plugins/jquery-confirm/jquery.confirm.min.js')}}"></script>
+<script src="{{asset('plugins/axios/axios.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>

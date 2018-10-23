@@ -33,4 +33,9 @@ class User extends Authenticatable
     {
         return asset('img/avatar.png');
     }
+
+    public function sources()
+    {
+        return $this->hasMany(SourceOfIncome::class);
+    }
 }

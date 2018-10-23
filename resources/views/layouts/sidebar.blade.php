@@ -21,6 +21,12 @@
                 </a>
             </li>
 
+            <li>
+                <a href="{{ route('sources.index') }}">
+                    <i class="fa fa-dashboard"></i> <span>Sources of Income</span>
+                </a>
+            </li>
+
         </ul>
     </section>
     <!-- /.sidebar -->

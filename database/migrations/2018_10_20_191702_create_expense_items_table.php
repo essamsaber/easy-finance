@@ -17,7 +17,7 @@ class CreateExpenseItemsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->string('name');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->enum('period', ['yearly','monthly','weekly','daily']);
             $table->decimal('requested_amount',10,2);
             $table->decimal('average',10,2);
