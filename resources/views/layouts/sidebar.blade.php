@@ -27,6 +27,12 @@
                 </a>
             </li>
 
+            <li>
+                <a href="{{ route('expense-items.index') }}">
+                    <i class="fa fa-dashboard"></i> <span>Expense Items</span>
+                </a>
+            </li>
+
         </ul>
     </section>
     <!-- /.sidebar -->

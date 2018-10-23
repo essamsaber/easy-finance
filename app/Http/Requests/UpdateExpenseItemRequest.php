@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSourceRequest extends FormRequest
+class UpdateExpenseItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class UpdateSourceRequest extends FormRequest
     {
         return [
             'name' =>'required','max:255',
-            'income' => 'required|numeric',
+            'requested_amount' => 'required|numeric',
             'average' => 'required|numeric',
             'period' => 'in:yearly,monthly,weekly,daily'
         ];

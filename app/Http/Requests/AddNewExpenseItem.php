@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UpdateSourceRequest extends FormRequest
+class AddNewExpenseItem extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +24,18 @@ class UpdateSourceRequest extends FormRequest
      */
     public function rules()
     {
+        $self = $this;
         return [
-            'name' =>'required','max:255',
-            'income' => 'required|numeric',
+            'name' => [
+                'required','max:255',
+                Rule::unique('expense_items')
+                    ->where(function($query) use($self){
+                        return $query
+                            ->whereName($this->name)
+                            ->whereUserId(auth()->id());
+                    })
+            ],
+            'requested_amount' => 'required|numeric',
             'average' => 'required|numeric',
             'period' => 'in:yearly,monthly,weekly,daily'
         ];

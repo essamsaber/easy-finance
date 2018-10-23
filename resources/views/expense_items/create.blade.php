@@ -8,21 +8,21 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
-            <li><a href="{{route('sources.index')}}">Sources of Income</a></li>
-            <li class="active"><a href="#">Add new source</a></li>
+            <li><a href="{{route('expense-items.index')}}">Expense Items</a></li>
+            <li class="active"><a href="#">Add new item</a></li>
         </ol>
     </section>
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <form action="{{route('sources.store')}}" method="POST">
+                <form action="{{route('expense-items.store')}}" method="POST">
                     {{csrf_field()}}
                     <div class="box">
                         <div class="box-header">
                             <div class="pull-left">
-                                <a href="{{route('sources.index')}}" class="btn btn-info">
+                                <a href="{{route('expense-items.index')}}" class="btn btn-info">
                                     <i class="fa fa-arrow-circle-left"></i>
-                                    Back to sources
+                                    Back to expense items
                                 </a>
                             </div>
                         </div>
@@ -43,18 +43,20 @@
                             </div>
                             <div class="form-group {{$errors->has('period') ? 'has-error' : ''}}">
                                 <label for="period">Period:</label>
-                                @foreach(config('finance.periods') as $period)
-                                    <option {{old('period') == $period ? 'selected' : ''}} value="{{$period}}">{{ucfirst($period)}}</option>
-                                @endforeach
+                                <select name="period" id="" class="form-control">
+                                    @foreach(config('finance.periods') as $period)
+                                        <option {{old('period') == $period ? 'selected' : ''}} value="{{$period}}">{{ucfirst($period)}}</option>
+                                    @endforeach
+                                </select>
                                 @if($errors->has('period'))
                                     <span class="help-block">{{$errors->first('period')}}</span>
                                 @endif
                             </div>
-                            <div class="form-group {{$errors->has('income') ? 'has-error' : ''}}">
-                                <label for="income">Income:</label>
-                                <input name="income" class="form-control" id="income" value="{{old('income')}}">
-                                @if($errors->has('income'))
-                                    <span class="help-block">{{$errors->first('income')}}</span>
+                            <div class="form-group {{$errors->has('requested_amount') ? 'has-error' : ''}}">
+                                <label for="income">Requested amount:</label>
+                                <input name="requested_amount" class="form-control" id="requested_amount" value="{{old('requested_amount')}}">
+                                @if($errors->has('requested_amount'))
+                                    <span class="help-block">{{$errors->first('requested_amount')}}</span>
                                 @endif
                             </div>
                             <div class="form-group {{$errors->has('average') ? 'has-error' : ''}}">
@@ -81,10 +83,10 @@
 
 @section('scripts')
     <script>
-        $(document).on('blur', '#income', function(){
-           var income = $(this).val();
-           if(income != '') {
-               $('#average').val(income);
+        $(document).on('blur', '#requested_amount', function(){
+           var amount = $(this).val();
+           if(amount != '') {
+               $('#average').val(amount);
            }
         });
     </script>

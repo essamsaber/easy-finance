@@ -19,7 +19,7 @@ class IncomeSourcesController extends Controller
 
     public function index()
     {
-        $sources = SourceOfIncome::latest()->paginate($this->limit);
+        $sources = SourceOfIncome::latest()->mine()->paginate($this->limit);
         return view('sources.index',compact('sources'));
     }
     public function create()

@@ -1,14 +1,14 @@
 @extends('layouts.main')
-@section('title','Sources of Income')
+@section('title','Expense Items')
 @section('content')
     <section class="content-header">
         <h1>
-            Sources
+            Expense Items
             <small>view all</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
-            <li class="active"><a href="#">Sources of Income</a></li>
+            <li class="active"><a href="#">Expense Items</a></li>
         </ol>
     </section>
     <section class="content">
@@ -17,9 +17,9 @@
                 <div class="box">
                     <div class="box-header">
                         <div class="pull-left">
-                            <a href="{{route('sources.create')}}" class="btn btn-info">
+                            <a href="{{route('expense-items.create')}}" class="btn btn-info">
                                 <i class="fa fa-plus"></i>
-                                Add new source
+                                Add new expense item
                             </a>
                         </div>
                     </div>
@@ -38,17 +38,17 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($sources as $source)
+                            @forelse($items as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$source->name}}</td>
-                                    <td width="300">{{$source->description}}</td>
-                                    <td>{{$source->period}}</td>
-                                    <td>{{$source->income}}</td>
-                                    <td>{{$source->average}}</td>
+                                    <td>{{$item->name}}</td>
+                                    <td width="300">{{$item->description}}</td>
+                                    <td>{{$item->period}}</td>
+                                    <td>{{$item->requested_amount}}</td>
+                                    <td>{{$item->average}}</td>
                                     <td>
-                                        <a href="{{route('sources.edit', $source)}}" class="btn btn-primary btn xs"><i class="fa fa-edit"></i></a>
-                                        <a href="#" data-source-id="{{$source->id}}" class="delete-source btn btn-danger btn xs"><i class="fa fa-times"></i></a>
+                                        <a href="{{route('expense-items.edit', $item)}}" class="btn btn-primary btn xs"><i class="fa fa-edit"></i></a>
+                                        <a href="#" data-item-id="{{$item->id}}" class="delete-source btn btn-danger btn xs"><i class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
                             @empty
@@ -61,7 +61,7 @@
                     </div>
                     <div class="box-footer">
                         <div class="text-center">
-                            {{$sources->links()}}
+                            {{$items->links()}}
                         </div>
                     </div>
                 </div>
@@ -74,12 +74,12 @@
     $(function(){
         $(document).on('click', '.delete-source', function(e){
             e.preventDefault();
-            var source_id = $(this).data('source-id');
+            var item_id = $(this).data('item-id');
             $.confirm({
                 text: "Are you sure you want to delete that record?",
                 title: "Confirmation required",
                 confirm: function(button) {
-                    var url = "{{request()->getBaseUrl()}}/sources/"+source_id
+                    var url = "{{request()->getBaseUrl()}}/expense-items/"+item_id
                     axios.delete(url)
                     .then((response) => {
                         location.reload();
