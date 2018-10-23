@@ -23,13 +23,19 @@
 
             <li>
                 <a href="{{ route('sources.index') }}">
-                    <i class="fa fa-dashboard"></i> <span>Sources of Income</span>
+                    <i class="fa fa-briefcase"></i> <span>Sources of Income</span>
                 </a>
             </li>
 
             <li>
                 <a href="{{ route('expense-items.index') }}">
-                    <i class="fa fa-dashboard"></i> <span>Expense Items</span>
+                    <i class="fa fa-file-excel-o"></i> <span>Expense Items</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('income.index') }}">
+                    <i class="fa fa-money"></i> <span>Income</span>
                 </a>
             </li>
 

@@ -1,5 +1,6 @@
 <header class="main-header">
     <!-- Logo -->
+
     <a href="/" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>M</b>B</span>
@@ -8,6 +9,7 @@
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
+        <span class="current-balance">Current Balance: <strong>{{auth()->user()->wallet->balance}}</strong> <i class="fa fa-dollar"></i></span>
         <!-- Sidebar toggle button-->
         <!-- <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
           <span class="sr-only">Toggle navigation</span>

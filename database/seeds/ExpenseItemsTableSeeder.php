@@ -21,13 +21,14 @@ class ExpenseItemsTableSeeder extends Seeder
 
         $users->each(function($user)use($items, $periods, $items_collection,$faker){
 
-            for($i = 0; $i <= 20; $i++) {
+            foreach($items as $item) {
+
                 $period = rand(0,3);
                 $item = rand(0,2);
 
                 $items_collection->push([
                     'user_id' => $user->id,
-                    'name' => $items[$item],
+                    'name' => $item,
                     'period' => $periods[$period],
                     'description' => $faker->paragraphs(1, true),
                     'requested_amount' => rand(1000,9000),

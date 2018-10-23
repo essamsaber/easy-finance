@@ -24,12 +24,11 @@ class AddNewExpenseItem extends FormRequest
      */
     public function rules()
     {
-        $self = $this;
         return [
             'name' => [
                 'required','max:255',
                 Rule::unique('expense_items')
-                    ->where(function($query) use($self){
+                    ->where(function($query) {
                         return $query
                             ->whereName($this->name)
                             ->whereUserId(auth()->id());

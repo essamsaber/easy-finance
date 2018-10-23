@@ -28,6 +28,16 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .current-balance{
+            color: white;
+            position: absolute;
+            top: 10px;
+            font-size: 17px;
+            left: 15px;
+        }
+    </style>
+    @yield('styles')
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">

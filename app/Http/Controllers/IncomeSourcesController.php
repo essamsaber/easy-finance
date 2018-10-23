@@ -22,6 +22,14 @@ class IncomeSourcesController extends Controller
         $sources = SourceOfIncome::latest()->mine()->paginate($this->limit);
         return view('sources.index',compact('sources'));
     }
+
+    public function show($id)
+    {
+        $source = SourceOfIncome::where('id', $id)->first();
+        if($source) return $source;
+        return 0;
+    }
+
     public function create()
     {
         return view('sources.create');

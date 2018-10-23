@@ -1,22 +1,23 @@
 @extends('layouts.main')
-@section('title','Add Income')
+@section('title','Edit Income')
 @section('content')
     <section class="content-header">
         <h1>
             Income
-            <small>add income</small>
+            <small>edit income</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
             <li><a href="{{route('income.index')}}">Income</a></li>
-            <li class="active"><a href="#">Add Income</a></li>
+            <li class="active"><a href="#">Edit {{$income->source->name}} Income</a></li>
         </ol>
     </section>
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <form action="{{route('income.store')}}" method="POST">
+                <form action="{{route('income.update', $income)}}" method="POST">
                     {{csrf_field()}}
+                    {{method_field('PATCH')}}
                     <div class="box">
                         <div class="box-header">
                             <div class="pull-left">
@@ -32,7 +33,7 @@
                                 <select name="source_id" id="source" class="form-control">
                                     <option value="">Please choose the income source</option>
                                     @foreach($sources as $source)
-                                        <option {{old('source') == $source->id ? 'selected' : ''}} value="{{$source->id}}">{{$source->name}}</option>
+                                        <option {{$income->source->id == $source->id ? 'selected' : ''}} value="{{$source->id}}">{{$source->name}}</option>
                                     @endforeach
                                 </select>
                                 @if($errors->has('source'))
@@ -41,7 +42,7 @@
                             </div>
                             <div class="form-group {{$errors->has('notes') ? 'has-error' : ''}}">
                                 <label for="notes">Notes:</label>
-                                <textarea placeholder="(Optional)" name="notes" id="" rows="6" class="form-control">{{old('notes')}}</textarea>
+                                <textarea placeholder="(Optional)" name="notes" id="" rows="6" class="form-control">{{$income->notes}}</textarea>
                                 @if($errors->has('notes'))
                                     <span class="help-block">{{$errors->first('notes')}}</span>
                                 @endif
@@ -49,8 +50,8 @@
 
                             <div class="form-group {{$errors->has('income') ? 'has-error' : ''}}">
                                 <label for="income">Income:</label>
-                                <input name="actual_income" class="form-control" id="income" value="{{old('actual_income')}}">
-                                <input type="hidden" name="expected_income" class="form-control" id="expected-income" value="">
+                                <input name="actual_income" class="form-control" id="income" value="{{$income->actual_income}}">
+                                <input type="hidden" name="expected_income" class="form-control" id="expected-income" value="{{$income->actual_income}}">
                                 @if($errors->has('income'))
                                     <span class="help-block">{{$errors->first('income')}}</span>
                                 @endif
@@ -59,7 +60,7 @@
                                 <label for="income_date">Income Date:</label>
                                 <div class='input-group date' id='datetimepicker1'>
                                     <input type="text" class="form-control" name="income_date" placeholder="Y-m-d"
-                                           id="income_date"/>
+                                           id="income_date" value="{{$income->income_date}}"/>
                                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -69,7 +70,7 @@
                         <div class="box-footer">
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success">
-                                    <i class="fa fa-save"> Save</i>
+                                    <i class="fa fa-refresh"> Update</i>
                                 </button>
                             </div>
                         </div>
@@ -96,7 +97,7 @@
             });
 
             $(document).on('change', '#source', function(){
-               var source_id = $(this).val();
+                var source_id = $(this).val();
                 var url = "{{request()->getBaseUrl()}}/sources/"+source_id;
                 axios.get(url)
                     .then((response) => {

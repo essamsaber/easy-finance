@@ -36,16 +36,18 @@
                             </div>
                             <div class="form-group {{$errors->has('description') ? 'has-error' : ''}}">
                                 <label for="description">Description:</label>
-                                <textarea name="description" id="" rows="6" class="form-control">{{old('description')}}</textarea>
+                                <textarea placeholder="(Optional)" name="description" id="" rows="6" class="form-control">{{old('description')}}</textarea>
                                 @if($errors->has('description'))
                                     <span class="help-block">{{$errors->first('description')}}</span>
                                 @endif
                             </div>
                             <div class="form-group {{$errors->has('period') ? 'has-error' : ''}}">
                                 <label for="period">Period:</label>
-                                @foreach(config('finance.periods') as $period)
-                                    <option {{old('period') == $period ? 'selected' : ''}} value="{{$period}}">{{ucfirst($period)}}</option>
-                                @endforeach
+                                <select name="period" id="" class="form-control">
+                                    @foreach(config('finance.periods') as $period)
+                                        <option {{old('period') == $period ? 'selected' : ''}} value="{{$period}}">{{ucfirst($period)}}</option>
+                                    @endforeach
+                                </select>
                                 @if($errors->has('period'))
                                     <span class="help-block">{{$errors->first('period')}}</span>
                                 @endif

@@ -24,12 +24,11 @@ class AddNewSourceRequest extends FormRequest
      */
     public function rules()
     {
-        $self = $this;
         return [
             'name' => [
                 'required','max:255',
                 Rule::unique('source_of_incomes')
-                    ->where(function($query) use($self){
+                    ->where(function($query){
                         return $query
                             ->whereName($this->name)
                             ->whereUserId(auth()->id());
