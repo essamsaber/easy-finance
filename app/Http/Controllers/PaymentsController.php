@@ -26,6 +26,8 @@ class PaymentsController extends Controller
 
     public function show(ExpenseItem $expenseItem)
     {
+        $this->authorize('view', $expenseItem);
+
         return $expenseItem;
     }
 
@@ -36,16 +38,22 @@ class PaymentsController extends Controller
 
     public function edit(Expense $payment)
     {
+        $this->authorize('edit', $payment);
+
         $items = ExpenseItem::mine()->get();
         return view('payments.edit', compact('items','payment'));
     }
 
     public function update(UpdatePaymentRequest $request, Expense $payment)
     {
+        $this->authorize('update', $payment);
+
         return $request->updatePayment($payment);
     }
     public function destroy(Expense $payment)
     {
+        $this->authorize('delete', $payment);
+
         try{
             DB::transaction(function() use($payment){
                 $payment->transaction()->delete();

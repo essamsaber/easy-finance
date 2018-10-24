@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 class IncomeController extends Controller
 {
     protected $limit = 15;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -37,19 +38,22 @@ class IncomeController extends Controller
 
     public function edit(Income $income)
     {
-
+        $this->authorize('edit', $income);
         $sources = auth()->user()->sources;
         return view('income.edit', compact('income', 'sources'));
     }
 
     public function update(UpdateIncomeRequest $request, Income $income)
     {
+        $this->authorize('update', $income);
         return $request->updateIncome($income);
     }
 
     public function destroy(Income $income)
     {
-       try{
+        $this->authorize('delete', $income);
+
+        try{
            DB::transaction(function() use($income){
                $income->transaction()->delete();
                auth()->user()->wallet()->increment('balance', $income->actual_income);

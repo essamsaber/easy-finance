@@ -34,25 +34,30 @@ class IncomeSourcesController extends Controller
     {
         return view('sources.create');
     }
+
     public function store(AddNewSourceRequest $request)
     {
         $request->user()->sources()->create($request->all());
         return redirect()->route('sources.index')
             ->with('success', 'New income source has been created successfully !');
     }
+
     public function edit(SourceOfIncome $source)
     {
+        $this->authorize('edit', $source);
         return view('sources.edit', compact('source'));
     }
 
     public function update(UpdateSourceRequest $request, SourceOfIncome $source)
     {
+        $this->authorize('update', $source);
         $source->update($request->except('user_id'));
         return redirect()->route('sources.index')
             ->with('success', 'The income source has been updated successfully !');
     }
     public function destroy(SourceOfIncome $source)
     {
+        $this->authorize('delete', $source);
         if($source->delete()) {
             return session()
                 ->flash('success', 'Income source has been deleted successfully');

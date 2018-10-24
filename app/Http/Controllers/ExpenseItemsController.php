@@ -30,6 +30,7 @@ class ExpenseItemsController extends Controller
 
     public function show(ExpenseItem $expenseItem)
     {
+        $this->authorize('view', $expenseItem);
         return $expenseItem;
     }
 
@@ -42,11 +43,13 @@ class ExpenseItemsController extends Controller
 
     public function edit(ExpenseItem $expenseItem)
     {
+        $this->authorize('edit', $expenseItem);
         return view('expense_items.edit', compact('expenseItem'));
     }
 
     public function update(UpdateExpenseItemRequest $request, ExpenseItem $expenseItem)
     {
+        $this->authorize('update', $expenseItem);
         $expenseItem->update($request->except('user_id'));
         return redirect()->route('expense-items.index')
             ->with('success', 'The income source has been updated successfully !');
@@ -54,6 +57,7 @@ class ExpenseItemsController extends Controller
 
     public function destroy(ExpenseItem $expenseItem)
     {
+        $this->authorize('delete', $expenseItem);
         if($expenseItem->delete()) {
             return session()
                 ->flash('success', 'Expense item has been deleted successfully');
