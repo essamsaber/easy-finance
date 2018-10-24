@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-class UpdateIncomeRequest extends FormRequest
+class UpdatePaymentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,32 +26,33 @@ class UpdateIncomeRequest extends FormRequest
     public function rules()
     {
         return [
-            'source_id' => 'required|integer|exists:source_of_incomes,id',
-            'actual_income' => 'required|numeric',
-            'income_date' => [
+            'expense_item_id' => 'required|integer|exists:expense_items,id',
+            'actual_expense' => 'required|numeric',
+            'expense_date' => [
                 'required',
                 'date_format:Y-m-d',
-                Rule::unique('incomes')
+                Rule::unique('expenses')
                     ->where(function ($query) {
                         return $query
-                            ->whereIncomeDate($this->income_date)
+                            ->whereExpenseDate($this->expense_date)
+                            ->where('expense_item_id', $this->expense_item_id)
                             ->whereUserId(auth()->id())
-                            ->whereSourceId($this->source_id)
                             ->whereNotIn('id', [$this->id]);
-
+                        ;
                     })
             ]
+
         ];
     }
 
-    public function updateIncome($income)
+    public function updatePayment($payment)
     {
         try{
-            DB::transaction(function()use($income){
+            DB::transaction(function()use($payment){
                 $data = $this->except('_token', '_method');
-                $this->updateWallet($income, $data)
-                ->updateIncomeRecord($income, $data)
-                ->updateTransaction($income, $data);
+                $this->updateWallet($payment, $data)
+                    ->updatePaymentRecord($payment, $data)
+                    ->updateTransaction($payment, $data);
 
             });
             return redirect()
@@ -62,22 +63,22 @@ class UpdateIncomeRequest extends FormRequest
         }
     }
 
-    private function updateWallet($income, $data)
+    private function updateWallet($payment, $data)
     {
-        auth()->user()->wallet()->decrement('balance', $income->actual_income);
-        auth()->user()->wallet()->increment('balance', $data['actual_income']);
+        auth()->user()->wallet()->increment('balance', $payment->actual_expense);
+        auth()->user()->wallet()->decrement('balance', $data['actual_expense']);
         return $this;
     }
 
-    private function updateIncomeRecord($income, $data)
+    private function updatePaymentRecord($payment, $data)
     {
-        $income->update($data);
+        $payment->update($data);
         return $this;
     }
 
-    private function updateTransaction($income, $data)
+    private function updateTransaction($payment, $data)
     {
-        $income->transaction()->update(['amount' => $data['actual_income']]);
+        $payment->transaction()->update(['amount' => $data['actual_expense']]);
         return true;
     }
 }

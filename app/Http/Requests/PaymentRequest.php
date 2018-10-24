@@ -7,10 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-class AddIncomeRequest extends FormRequest
+class PaymentRequest extends FormRequest
 {
-    protected $process_id = null;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -29,46 +27,47 @@ class AddIncomeRequest extends FormRequest
     public function rules()
     {
         return [
-            'source_id' => 'required|integer|exists:source_of_incomes,id',
-            'actual_income' => 'required|numeric',
-            'income_date' => [
+            'expense_item_id' => 'required|integer|exists:expense_items,id',
+            'actual_expense' => 'required|numeric',
+            'expense_date' => [
                 'required',
                 'date_format:Y-m-d',
-                Rule::unique('incomes')
+                Rule::unique('expenses')
                     ->where(function ($query) {
                         return $query
-                            ->whereIncomeDate($this->income_date)
-                            ->whereSourceId($this->source_id)
+                            ->whereExpenseDate($this->expense_date)
+                            ->where('expense_item_id', $this->expense_item_id)
                             ->whereUserId(auth()->id());
                     })
             ]
+
         ];
     }
 
-    public function storeIncome()
+    public function storePayment()
     {
         try {
             DB::transaction(function () {
                 $data = $this->except('_token');
-                $income_date = Carbon::parse($this->income_date);
-                $data['income_date'] = $income_date;
+                $expense_date = Carbon::parse($this->expense_date);
+                $data['expense_date'] = $expense_date;
 
-                $this->insertToIncomeTable($data)
+                $this->insertToPaymentTable($data)
                     ->updateBalance($data)
                     ->makeTransaction($data);
 
             });
-            return redirect()->route('income.index')
-                ->with('success', 'Income has been recorded successfully !');
+            return redirect()->route('payment.index')
+                ->with('success', 'Payment has been recorded successfully !');
         } catch (\Exception $exception) {
             dd($exception->getMessage());
             return back()->with('failed', 'Sorry something went wrong !');
         }
     }
 
-    private function insertToIncomeTable($data)
+    private function insertToPaymentTable($data)
     {
-        $insert = $this->user()->income()->create($data);
+        $insert = $this->user()->payment()->create($data);
         $this->process_id = $insert->id;
         return $this;
     }
@@ -76,16 +75,16 @@ class AddIncomeRequest extends FormRequest
     private function updateBalance($data)
     {
         $this->user()->wallet
-            ->increment('balance', $data['actual_income']);
+            ->decrement('balance', $data['actual_expense']);
         return $this;
     }
 
     private function makeTransaction($data)
     {
         $this->user()->transactions()->create([
-            'type' => 'income',
-            'transaction_date' => $data['income_date'],
-            'amount' => $data['actual_income'],
+            'type' => 'expense',
+            'transaction_date' => $data['expense_date'],
+            'amount' => $data['actual_expense'],
             'process_id' => $this->process_id
         ]);
         return true;

@@ -22,3 +22,4 @@ Route::get('logout', 'Auth\LoginController@logout');
 Route::resource('sources', 'IncomeSourcesController');
 Route::resource('expense-items', 'ExpenseItemsController');
 Route::resource('income', 'IncomeController');
+Route::resource('payment', 'PaymentsController');

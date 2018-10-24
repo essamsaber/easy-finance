@@ -1,42 +1,43 @@
+
 @extends('layouts.main')
-@section('title','Add Income')
+@section('title','Payment Process')
 @section('content')
     <section class="content-header">
         <h1>
             Income
-            <small>add income</small>
+            <small>payment process</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
-            <li><a href="{{route('income.index')}}">Income</a></li>
-            <li class="active"><a href="#">Add Income</a></li>
+            <li><a href="{{route('payment.index')}}">Payments</a></li>
+            <li class="active"><a href="#">Payment process</a></li>
         </ol>
     </section>
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <form action="{{route('income.store')}}" method="POST">
+                <form action="{{route('payment.store')}}" method="POST">
                     {{csrf_field()}}
                     <div class="box">
                         <div class="box-header">
                             <div class="pull-left">
-                                <a href="{{route('income.index')}}" class="btn btn-info">
+                                <a href="{{route('payment.index')}}" class="btn btn-info">
                                     <i class="fa fa-arrow-circle-left"></i>
-                                    Back to income
+                                    Back to payments
                                 </a>
                             </div>
                         </div>
                         <div class="box-body">
-                            <div class="form-group {{$errors->has('source_id') ? 'has-error' : ''}}">
-                                <label for="source_id">Source:</label>
-                                <select name="source_id" id="source" class="form-control">
-                                    <option value="">Please choose the income source</option>
-                                    @foreach($sources as $source)
-                                        <option {{old('source_id') == $source->id ? 'selected' : ''}} value="{{$source->id}}">{{$source->name}}</option>
+                            <div class="form-group {{$errors->has('expense_item_id') ? 'has-error' : ''}}">
+                                <label for="source_id">Expense Item:</label>
+                                <select name="expense_item_id" id="expense_item_id" class="form-control">
+                                    <option value="">Please choose the expense item</option>
+                                    @foreach($items as $item)
+                                        <option {{old('expense_item_id') == $item->id ? 'selected' : ''}} value="{{$item->id}}">{{$item->name}}</option>
                                     @endforeach
                                 </select>
-                                @if($errors->has('source_id'))
-                                    <span class="help-block">{{$errors->first('source_id')}}</span>
+                                @if($errors->has('expense_item_id'))
+                                    <span class="help-block">{{$errors->first('expense_item_id')}}</span>
                                 @endif
                             </div>
                             <div class="form-group {{$errors->has('notes') ? 'has-error' : ''}}">
@@ -47,25 +48,25 @@
                                 @endif
                             </div>
 
-                            <div class="form-group {{$errors->has('actual_income') ? 'has-error' : ''}}">
-                                <label for="income">Income:</label>
-                                <input name="actual_income" class="form-control" id="income" value="{{old('actual_income')}}">
-                                <input type="hidden" name="expected_income" class="form-control" id="expected-income" value="{{old('expected_income')}}">
-                                @if($errors->has('actual_income'))
-                                    <span class="help-block">{{$errors->first('actual_income')}}</span>
+                            <div class="form-group {{$errors->has('actual_expense') ? 'has-error' : ''}}">
+                                <label for="income">Amount:</label>
+                                <input name="actual_expense" class="form-control" id="expense" value="{{old('actual_expense')}}">
+                                <input type="hidden" name="expected_expense" class="form-control" id="expected_expense" value="{{old('expected_expense')}}">
+                                @if($errors->has('actual_expense'))
+                                    <span class="help-block">{{$errors->first('actual_expense')}}</span>
                                 @endif
                             </div>
-                            <div class="form-group {{$errors->has('income_date') ? 'has-error' : ''}}">
-                                <label for="income_date">Income Date:</label>
+                            <div class="form-group {{$errors->has('expense_date') ? 'has-error' : ''}}">
+                                <label for="expense_date">Payment Date:</label>
                                 <div class='input-group date' id='datetimepicker1'>
-                                    <input type="text" class="form-control" name="income_date" placeholder="Y-m-d"
-                                           id="income_date"/>
+                                    <input type="text" class="form-control" name="expense_date" placeholder="Y-m-d"
+                                           id="expense_date"/>
                                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
                                 </div>
-                                @if($errors->has('income_date'))
-                                    <span class="help-block">{{$errors->first('income_date')}}</span>
+                                @if($errors->has('expense_date'))
+                                    <span class="help-block">{{$errors->first('expense_date')}}</span>
                                 @endif
                             </div>
                         </div>
@@ -98,13 +99,13 @@
                 maxDate: startDateTo
             });
 
-            $(document).on('change', '#source', function(){
-               var source_id = $(this).val();
-                var url = "{{request()->getBaseUrl()}}/sources/"+source_id;
+            $(document).on('change', '#expense_item_id', function(){
+                var item_id = $(this).val();
+                var url = "{{request()->getBaseUrl()}}/expense-items/"+item_id;
                 axios.get(url)
                     .then((response) => {
-                        $("#income").val(response.data.income)
-                        $("#expected-income").val(response.data.income)
+                        $("#expense").val(response.data.requested_amount)
+                        $("#expected_expense").val(response.data.requested_amount)
                     }).catch((error) => {
 
                 })

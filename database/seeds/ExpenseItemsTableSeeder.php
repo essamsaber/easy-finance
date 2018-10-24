@@ -24,7 +24,7 @@ class ExpenseItemsTableSeeder extends Seeder
             foreach($items as $item) {
 
                 $period = rand(0,3);
-                $item = rand(0,2);
+
 
                 $items_collection->push([
                     'user_id' => $user->id,

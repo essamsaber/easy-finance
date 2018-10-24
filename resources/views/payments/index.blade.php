@@ -1,14 +1,14 @@
 @extends('layouts.main')
-@section('title','Income')
+@section('title','Payments')
 @section('content')
     <section class="content-header">
         <h1>
-            Income
-            <small>view income</small>
+            Payments
+            <small>view payments</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
-            <li class="active"><a href="#">Income</a></li>
+            <li class="active"><a href="#">Payments</a></li>
         </ol>
     </section>
     <section class="content">
@@ -17,9 +17,9 @@
                 <div class="box">
                     <div class="box-header">
                         <div class="pull-left">
-                            <a href="{{route('income.create')}}" class="btn btn-info">
+                            <a href="{{route('payment.create')}}" class="btn btn-info">
                                 <i class="fa fa-plus"></i>
-                                Add income
+                                Add Payment
                             </a>
                         </div>
                     </div>
@@ -28,27 +28,27 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Source</th>
-                                <th>Expected Income</th>
-                                <th>Actual Income</th>
+                                <th>Item</th>
+                                <th>Expected Payment</th>
+                                <th>Actual Payment</th>
                                 <th>Notes</th>
-                                <th>Income Date</th>
+                                <th>Payment Date</th>
                                 <th>Action</th>
 
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($income as $in)
+                            @forelse($payments as $payment)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$in->source->name}}</td>
-                                    <td>{{$in->expected_income}}</td>
-                                    <td>{{$in->actual_income}}</td>
-                                    <td width="300">{{$in->notes}}</td>
-                                    <td>{{$in->date}}</td>
+                                    <td>{{$payment->item->name}}</td>
+                                    <td>{{$payment->expected_expense}}</td>
+                                    <td>{{$payment->actual_expense}}</td>
+                                    <td width="300">{{$payment->notes}}</td>
+                                    <td>{{$payment->date}}</td>
                                     <td>
-                                        <a href="{{route('income.edit', $in)}}" class="btn btn-primary btn xs"><i class="fa fa-edit"></i></a>
-                                        <a href="#" data-income-id="{{$in->id}}" class="delete-income btn btn-danger btn xs"><i class="fa fa-times"></i></a>
+                                        <a href="{{route('payment.edit', $payment)}}" class="btn btn-primary btn xs"><i class="fa fa-edit"></i></a>
+                                        <a href="#" data-payment-id="{{$payment->id}}" class="delete-payment btn btn-danger btn xs"><i class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
                             @empty
@@ -61,7 +61,7 @@
                     </div>
                     <div class="box-footer">
                         <div class="text-center">
-                            {{$income->links()}}
+                            {{--{{$payments->links()}}--}}
                         </div>
                     </div>
                 </div>
@@ -70,16 +70,22 @@
     </section>
 @endsection
 @section('scripts')
+    <script src="{{asset('plugins/dataTables/js/jquery.dataTables.min.js')}}"></script>
+
     <script>
         $(function(){
-            $(document).on('click', '.delete-income', function(e){
+            // Initializing Datatable
+            $('#myTable').DataTable(); // End
+
+            // Delete payment event
+            $(document).on('click', '.delete-payment', function(e){
                 e.preventDefault();
-                var income_id = $(this).data('income-id');
+                var payment_id = $(this).data('payment-id');
                 $.confirm({
                     text: "Are you sure you want to delete that record?",
                     title: "Confirmation required",
                     confirm: function(button) {
-                        var url = "{{request()->getBaseUrl()}}/income/"+income_id
+                        var url = "{{request()->getBaseUrl()}}/payment/"+payment_id
                         axios.delete(url)
                             .then((response) => {
                                 location.reload();
@@ -98,7 +104,11 @@
                     dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
                 });
             })
-
+            // End delete payment event
         })
     </script>
+@endsection
+
+@section('styles')
+    <link rel="stylesheet" href="{{asset('plugins/dataTables/css/jquery.dataTables.min.css')}}">
 @endsection

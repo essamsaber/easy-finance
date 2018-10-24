@@ -39,6 +39,12 @@
                 </a>
             </li>
 
+            <li>
+                <a href="{{ route('payment.index') }}">
+                    <i class="fa fa-credit-card"></i> <span>Payments</span>
+                </a>
+            </li>
+
         </ul>
     </section>
     <!-- /.sidebar -->

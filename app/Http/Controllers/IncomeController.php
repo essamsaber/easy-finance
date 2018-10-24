@@ -32,7 +32,7 @@ class IncomeController extends Controller
 
     public function store(AddIncomeRequest $request)
     {
-        $request->storeIncome();
+        return $request->storeIncome();
     }
 
     public function edit(Income $income)
@@ -45,6 +45,23 @@ class IncomeController extends Controller
     public function update(UpdateIncomeRequest $request, Income $income)
     {
         return $request->updateIncome($income);
+    }
+
+    public function destroy(Income $income)
+    {
+       try{
+           DB::transaction(function() use($income){
+               $income->transaction()->delete();
+               auth()->user()->wallet()->increment('balance', $income->actual_income);
+               $income->delete();
+           });
+           return session()
+               ->flash('success', 'Income has been deleted successfully');
+       } catch (\Exception $exception) {
+           return session()
+               ->flash('failed', 'Something went wrong');
+           dd($exception->getMessage());
+       }
     }
 }
 
