@@ -2,13 +2,14 @@
 
 namespace App;
 
+use App\Http\Traits\UserUtilities;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, UserUtilities;
 
     /**
      * The attributes that are mass assignable.
@@ -29,38 +30,5 @@ class User extends Authenticatable
     ];
 
 
-    public function gravatar()
-    {
-        return asset('img/avatar.png');
-    }
 
-    public function sources()
-    {
-        return $this->hasMany(SourceOfIncome::class);
-    }
-
-    public function expenseItems()
-    {
-        return $this->hasMany(ExpenseItem::class);
-    }
-
-    public function wallet()
-    {
-        return $this->hasOne(Wallet::class);
-    }
-
-    public function income()
-    {
-        return $this->hasMany(Income::class);
-    }
-
-    public function payment()
-    {
-        return $this->hasMany(Expense::class);
-    }
-
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class);
-    }
 }
