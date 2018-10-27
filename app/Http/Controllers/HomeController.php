@@ -48,6 +48,13 @@ class HomeController extends Controller
         ]);
     }
 
+
+    /**
+     * Assign each amount to it's month
+     *
+     * @param $income
+     * @return array
+     */
     private function getAmountForEachMonth($income)
     {
         $income = $income->toArray();
@@ -67,6 +74,8 @@ class HomeController extends Controller
     }
 
     /**
+     * Get the actual income for the current year
+     *
      * @param $current_year
      * @return mixed
      */
@@ -88,6 +97,8 @@ class HomeController extends Controller
     }
 
     /**
+     * Get the actual payments for the current year
+     *
      * @param $current_year
      * @return mixed
      */

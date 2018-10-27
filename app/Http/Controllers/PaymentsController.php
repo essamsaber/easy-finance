@@ -9,21 +9,36 @@ use App\Http\Requests\UpdatePaymentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class PaymentsController
+ * @package App\Http\Controllers
+ */
 class PaymentsController extends Controller
 {
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         $payments =  request()->user()->payment()->get();
         return view('payments.index', compact('payments'));
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create()
     {
         $items = ExpenseItem::mine()->get();
         return view('payments.create', compact('items'));
     }
 
+    /**
+     * @param ExpenseItem $expenseItem
+     * @return ExpenseItem
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function show(ExpenseItem $expenseItem)
     {
         $this->authorize('view', $expenseItem);
@@ -31,11 +46,20 @@ class PaymentsController extends Controller
         return $expenseItem;
     }
 
+    /**
+     * @param PaymentRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(PaymentRequest $request)
     {
         return $request->storePayment();
     }
 
+    /**
+     * @param Expense $payment
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function edit(Expense $payment)
     {
         $this->authorize('edit', $payment);
@@ -44,12 +68,23 @@ class PaymentsController extends Controller
         return view('payments.edit', compact('items','payment'));
     }
 
+    /**
+     * @param UpdatePaymentRequest $request
+     * @param Expense $payment
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function update(UpdatePaymentRequest $request, Expense $payment)
     {
         $this->authorize('update', $payment);
 
         return $request->updatePayment($payment);
     }
+
+    /**
+     * @param Expense $payment
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function destroy(Expense $payment)
     {
         $this->authorize('delete', $payment);
