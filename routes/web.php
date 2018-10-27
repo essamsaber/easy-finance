@@ -23,3 +23,5 @@ Route::resource('sources', 'IncomeSourcesController');
 Route::resource('expense-items', 'ExpenseItemsController');
 Route::resource('income', 'IncomeController');
 Route::resource('payment', 'PaymentsController');
+Route::get('profile', 'ProfileController@show');
+Route::post('profile', 'ProfileController@update');
