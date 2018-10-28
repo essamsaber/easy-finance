@@ -6,12 +6,13 @@ Easy-Finance also provides you a complete staticts with a income and payments. <
 1- open your terminal in the directory that you want to download the project in. <br />
 2- type git clone https://github.com/essamsaber/easy-finance.git in the terminal. <br />
 3- Add the database connection information in the .env file  <br />
-4- type "composer update". <br />
-5- type php artisan config:cache. <br />
-5- type php artisan db:seed. <br />
-6- type php artisan serve. <br />
+4- composer update. <br />
+5- php artisan config:cache. <br />
+6- php artisan migrate. <br />
+7- php artisan db:seed. <br />
+8- php artisan serve. <br />
 
 ## Now you are good to go :D 
 
-** Note
+### Note
 This project is incomplete since there are a lot of features to be added in the coming days.
